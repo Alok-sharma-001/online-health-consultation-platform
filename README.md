@@ -4,17 +4,19 @@
 
 ---
 
-## 🌟 Quick Evaluation Access (Demo Credentials)
+## 🌟 Quick Evaluation Access (Role-Isolated Demo Portals)
 
-The application includes an **Evaluation Demo Switcher** bar at the very top of every screen. Evaluators can click any persona button to instantly log in and inspect the platform from all three role perspectives without retyping passwords:
+The platform provides dedicated, role-isolated portals for each persona. On the **Login Page (`/login`)**, evaluators can click any of the 1-click persona cards to immediately access that role's isolated workspace without entering passwords:
 
-| Role | Name / Specialty | Email | Password |
+| Role | Name / Specialty | Direct Access | Test Credentials |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | Platform Administrator | `admin@health.com` | `admin123` |
-| **Healthcare Professional** | Dr. Robert Smith, MD (Cardiology) | `dr.smith@health.com` | `doctor123` |
-| **Healthcare Professional** | Dr. Priya Patel, MD (Dermatology) | `dr.patel@health.com` | `doctor123` |
-| **Patient** | John Doe (Hypertension history) | `john.doe@patient.com` | `patient123` |
-| **Patient** | Jane Roe (Asthma & Eczema) | `jane.roe@patient.com` | `patient123` |
+| **Administrator** | Platform Administrator | **Admin Control Center** | `admin@health.com` / `admin123` |
+| **Healthcare Professional** | Dr. Robert Smith, MD (Cardiology) | **Doctor Clinical Desk** | `dr.smith@health.com` / `doctor123` |
+| **Healthcare Professional** | Dr. Priya Patel, MD (Dermatology) | **Doctor Clinical Desk** | `dr.patel@health.com` / `doctor123` |
+| **Patient** | John Doe (Hypertension history) | **Patient Care Portal** | `john.doe@patient.com` / `patient123` |
+| **Patient** | Jane Roe (Asthma & Eczema) | **Patient Care Portal** | `jane.roe@patient.com` / `patient123` |
+
+> **Role Isolation Note**: In adherence to realistic clinical workflows, logging in as one role completely isolates the interface—the top navbar and features exclusively reflect the authenticated user's privileges. Evaluators can click **"Sign Out"** at any time to return to `/login` and switch to another persona.
 
 ---
 
@@ -135,9 +137,9 @@ node test-api.js
 │   └── test-api.js             # Automated verification suite
 ├── client/
 │   ├── src/
-│   │   ├── components/         # Navbar, DemoSwitcherBar, ProtectedRoute
-│   │   ├── components/modals/  # BookingModal, ConsultationModal, PatientHistoryModal, ChatModal
-│   │   ├── context/            # AuthContext with 1-click persona switcher
+│   │   ├── components/         # Navbar, ProtectedRoute
+│   │   ├── components/modals/  # BookingModal, ConsultationModal, PatientHistoryModal, ChatModal, PrescriptionModal
+│   │   ├── context/            # AuthContext with role authentication and session management
 │   │   ├── pages/
 │   │   │   ├── admin/          # AdminDashboard (Users, Appointments, Settings, Analytics)
 │   │   │   ├── doctor/         # DoctorDashboard (Schedule, Consultations, Records)

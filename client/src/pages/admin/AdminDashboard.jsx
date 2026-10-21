@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Users,
   Calendar,
@@ -15,8 +16,19 @@ import {
 } from 'lucide-react';
 import { api } from '../../services/api';
 
-export default function AdminDashboard({ defaultTab = 'users' }) {
-  const [activeTab, setActiveTab] = useState(defaultTab);
+export default function AdminDashboard() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Active tab derived directly from location.pathname to ensure top Navbar works immediately
+  const getActiveTab = () => {
+    if (location.pathname.includes('/appointments')) return 'appointments';
+    if (location.pathname.includes('/settings')) return 'settings';
+    if (location.pathname.includes('/analytics')) return 'analytics';
+    return 'users';
+  };
+
+  const activeTab = getActiveTab();
   const [users, setUsers] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [settings, setSettings] = useState({});
@@ -178,7 +190,7 @@ export default function AdminDashboard({ defaultTab = 'users' }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Top Banner */}
+      {/* Top Banner (Clean, NO duplicate buttons) */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <span className="text-xs uppercase tracking-wider font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
@@ -188,44 +200,11 @@ export default function AdminDashboard({ defaultTab = 'users' }) {
           <p className="text-xs text-slate-500">Oversee users, appointments, system settings, and performance statistics.</p>
         </div>
 
-        {/* Tab Buttons */}
-        <div className="flex items-center gap-1 bg-slate-200/60 p-1 rounded-xl text-xs font-semibold">
-          <button
-            onClick={() => setActiveTab('users')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
-              activeTab === 'users' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Users className="w-3.5 h-3.5" />
-            <span>Users</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('appointments')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
-              activeTab === 'appointments' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Appointments</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
-              activeTab === 'settings' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Settings className="w-3.5 h-3.5" />
-            <span>Settings</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('analytics')}
-            className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
-              activeTab === 'analytics' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <BarChart3 className="w-3.5 h-3.5" />
-            <span>Analytics</span>
-          </button>
+        <div className="text-right hidden sm:block">
+          <span className="text-xs text-slate-400 font-semibold block uppercase tracking-wider">Active Panel:</span>
+          <span className="text-sm font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-lg inline-block mt-0.5 border border-slate-200">
+            {activeTab === 'users' ? '👥 User Management' : activeTab === 'appointments' ? '📅 Appointment Oversight' : activeTab === 'settings' ? '⚙️ System Configuration' : '📊 Real-Time Analytics'}
+          </span>
         </div>
       </div>
 

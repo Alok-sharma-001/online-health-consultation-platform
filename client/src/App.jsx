@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
-import DemoSwitcherBar from './components/DemoSwitcherBar';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Login from './pages/auth/Login';
@@ -31,9 +30,6 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-          {/* Universal 1-Click Evaluation Switcher Bar */}
-          <DemoSwitcherBar />
-
           {/* Main Top Navbar */}
           <Navbar />
 
@@ -52,39 +48,15 @@ export default function App() {
                 path="/admin"
                 element={
                   <ProtectedRoute allowedRoles={['ADMIN']}>
-                    <AdminDashboard defaultTab="users" />
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/admin/users"
+                path="/admin/*"
                 element={
                   <ProtectedRoute allowedRoles={['ADMIN']}>
-                    <AdminDashboard defaultTab="users" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/appointments"
-                element={
-                  <ProtectedRoute allowedRoles={['ADMIN']}>
-                    <AdminDashboard defaultTab="appointments" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/settings"
-                element={
-                  <ProtectedRoute allowedRoles={['ADMIN']}>
-                    <AdminDashboard defaultTab="settings" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/analytics"
-                element={
-                  <ProtectedRoute allowedRoles={['ADMIN']}>
-                    <AdminDashboard defaultTab="analytics" />
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />
@@ -94,31 +66,15 @@ export default function App() {
                 path="/doctor"
                 element={
                   <ProtectedRoute allowedRoles={['DOCTOR']}>
-                    <DoctorDashboard defaultTab="consultations" />
+                    <DoctorDashboard />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/doctor/consultations"
+                path="/doctor/*"
                 element={
                   <ProtectedRoute allowedRoles={['DOCTOR']}>
-                    <DoctorDashboard defaultTab="consultations" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/doctor/schedule"
-                element={
-                  <ProtectedRoute allowedRoles={['DOCTOR']}>
-                    <DoctorDashboard defaultTab="schedule" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/doctor/records"
-                element={
-                  <ProtectedRoute allowedRoles={['DOCTOR']}>
-                    <DoctorDashboard defaultTab="records" />
+                    <DoctorDashboard />
                   </ProtectedRoute>
                 }
               />
@@ -128,39 +84,15 @@ export default function App() {
                 path="/patient"
                 element={
                   <ProtectedRoute allowedRoles={['PATIENT']}>
-                    <PatientDashboard defaultTab="book" />
+                    <PatientDashboard />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/patient/book"
+                path="/patient/*"
                 element={
                   <ProtectedRoute allowedRoles={['PATIENT']}>
-                    <PatientDashboard defaultTab="book" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/patient/advice"
-                element={
-                  <ProtectedRoute allowedRoles={['PATIENT']}>
-                    <PatientDashboard defaultTab="advice" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/patient/records"
-                element={
-                  <ProtectedRoute allowedRoles={['PATIENT']}>
-                    <PatientDashboard defaultTab="records" />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/patient/profile"
-                element={
-                  <ProtectedRoute allowedRoles={['PATIENT']}>
-                    <PatientDashboard defaultTab="profile" />
+                    <PatientDashboard />
                   </ProtectedRoute>
                 }
               />
