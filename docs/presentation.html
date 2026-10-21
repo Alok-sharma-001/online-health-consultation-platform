@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentation - Online Health Consultation Platform</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --secondary: #0f172a;
+      --accent: #10b981;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #334155;
+      --text-dark: #0f172a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .top-bar {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .top-bar h1 {
+      font-size: 18px;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .btn-outline {
+      background: transparent;
+      color: var(--secondary);
+      border: 1px solid #cbd5e1;
+    }
+    .btn-outline:hover { background: #e2e8f0; }
+
+    .slide-container {
+      width: 100%;
+      max-width: 1000px;
+      height: 600px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e2e8f0;
+    }
+
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 48px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .slide.active {
+      display: flex;
+    }
+
+    .slide-header {
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 16px;
+    }
+    .slide-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: #e0f2fe;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .slide-subtitle {
+      font-size: 16px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .slide-body {
+      flex: 1;
+      padding: 24px 0;
+      overflow-y: auto;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .card h3 {
+      font-size: 16px;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p, .card ul {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #475569;
+    }
+    .card ul {
+      padding-left: 20px;
+    }
+    .card li {
+      margin-bottom: 6px;
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 16px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .top-bar, .nav-controls {
+        display: none !important;
+      }
+      .slide-container {
+        max-width: 100%;
+        height: auto;
+        box-shadow: none;
+        border: none;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        height: 100vh;
+        border-bottom: 1px dashed #cbd5e1;
+        padding: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1>Project 12: Online Health Consultation Platform</h1>
+    <div class="actions">
+      <button class="btn btn-outline" onclick="window.print()">🖨️ Export / Print to PDF</button>
+      <button class="btn btn-outline" id="prevBtn" onclick="changeSlide(-1)">◀ Previous</button>
+      <span id="slideIndicator" style="font-weight: 600; font-size: 14px; line-height: 34px;">1 / 10</span>
+      <button class="btn" id="nextBtn" onclick="changeSlide(1)">Next ▶</button>
+    </div>
+  </div>
+
+  <div class="slide-container">
+    <!-- Slide 1 -->
+    <div class="slide active">
+      <div class="slide-header">
+        <span class="slide-badge">Overview</span>
+        <h2 class="slide-title">Online Health Consultation Platform</h2>
+        <p class="slide-subtitle">Project 12: Capstone Project Presentation</p>
+      </div>
+      <div class="slide-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <h3 style="font-size: 24px; color: var(--primary); margin-bottom: 16px;">Next-Generation Telemedicine & Health Records Ecosystem</h3>
+        <p style="font-size: 16px; max-width: 700px; color: #475569; margin-bottom: 30px;">
+          A role-based web application connecting Patients, Healthcare Professionals (Doctors), and System Administrators with appointment scheduling, clinical advice, electronic health records, and system-wide analytics.
+        </p>
+        <div class="grid-3" style="width: 100%; max-width: 800px;">
+          <div class="card" style="border-top: 4px solid var(--primary);">
+            <h3>👨‍⚕️ Doctors</h3>
+            <p>Schedule availability, review patient history, provide diagnoses & digital prescriptions.</p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent);">
+            <h3>🧑‍🦽 Patients</h3>
+            <p>Book verified slots, receive medical advice, and manage electronic health records.</p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--secondary);">
+            <h3>🛡️ Admins</h3>
+            <p>User management, system configurations, master appointment control & analytics.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Full-Stack Telemedicine System</span>
+        <span>Slide 1 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Problem Statement</span>
+        <h2 class="slide-title">Challenges in Traditional Health Consultations</h2>
+        <p class="slide-subtitle">Bridging the gap between medical providers and patients</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>⚠️ Key Industry Challenges</h3>
+            <ul>
+              <li><strong>Physical Queues & Geographic Friction:</strong> Routine consultations and follow-ups require physical travel and long wait times.</li>
+              <li><strong>Scattered Health Records:</strong> Paper prescriptions and disparate clinic logs result in missing medical context during critical diagnoses.</li>
+              <li><strong>Scheduling Inefficiencies:</strong> Manual booking leads to double-booking, missed slots, and physician schedule mismanagement.</li>
+              <li><strong>Lack of Governance:</strong> Clinics lack unified administrative metrics on doctor utilization and patient consultation completion.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>💡 Platform Objectives</h3>
+            <ul>
+              <li>Provide instant, conflict-free online booking with verified specialist doctors.</li>
+              <li>Centralize digital medical advice, dosages, and follow-up plans in a patient vault.</li>
+              <li>Empower healthcare professionals with complete patient medical histories prior to consultation.</li>
+              <li>Deliver administrative transparency with actionable platform usage and appointment statistics.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 2 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Architecture</span>
+        <h2 class="slide-title">System Architecture & Design</h2>
+        <p class="slide-subtitle">Modular, decoupled, and secure full-stack design</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3>💻 Frontend Layer</h3>
+            <ul>
+              <li><strong>React 18 & Vite:</strong> Ultra-responsive Single Page Application (SPA).</li>
+              <li><strong>Tailwind CSS:</strong> Healthcare-optimized design system.</li>
+              <li><strong>Role-Based Routing:</strong> Protected route guards for Admin, Doctor, and Patient.</li>
+              <li><strong>Interactive Role Switcher:</strong> 1-click persona switching for evaluators.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>⚙️ Backend API Layer</h3>
+            <ul>
+              <li><strong>Node.js & Express:</strong> RESTful API server with clean MVC architecture.</li>
+              <li><strong>JWT Authentication:</strong> Secure bearer token authorization.</li>
+              <li><strong>RBAC Middleware:</strong> Strict route isolation per user role.</li>
+              <li><strong>Well-Commented Code:</strong> Highly modular controllers and services.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>🗄️ Database & Storage</h3>
+            <ul>
+              <li><strong>SQLite Engine:</strong> Embedded, reliable, and zero-configuration database.</li>
+              <li><strong>Relational Integrity:</strong> Foreign key cascades for users, appointments, and records.</li>
+              <li><strong>Pre-Populated Seeds:</strong> Realistic demo doctors, patients, appointments, and chat histories.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 3 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Role 1: Administrator</span>
+        <h2 class="slide-title">Admin Module & Governance</h2>
+        <p class="slide-subtitle">Complete platform management and oversight</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>👥 User Management</h3>
+            <p><strong>Input:</strong> User details (Name, Email, Role, Specialty, Status)<br>
+            <strong>Output:</strong> Confirmation prompt, updated user catalog.<br>
+            <strong>Functionality:</strong> Create, update, toggle active status, and delete users across all three roles.</p>
+          </div>
+          <div class="card">
+            <h3>📅 Appointment Management</h3>
+            <p><strong>Input:</strong> Appointment filters (Doctor, Patient, Status)<br>
+            <strong>Output:</strong> Filtered schedule view & override alerts.<br>
+            <strong>Functionality:</strong> Master view of all consultations across the entire platform with cancel/reschedule controls.</p>
+          </div>
+          <div class="card">
+            <h3>⚙️ System Settings</h3>
+            <p><strong>Input:</strong> Platform configurations (Title, Slot duration, Support email)<br>
+            <strong>Output:</strong> Confirmation message.<br>
+            <strong>Functionality:</strong> Update system-wide policies and operational rules dynamically.</p>
+          </div>
+          <div class="card">
+            <h3>📊 System Analytics</h3>
+            <p><strong>Input:</strong> Metric queries & date filters.<br>
+            <strong>Output:</strong> Visual reports, KPI counts, status distribution charts.<br>
+            <strong>Functionality:</strong> Real-time reports on appointment completion, active doctors, and patient volume.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 4 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Role 2: Healthcare Professional</span>
+        <h2 class="slide-title">Doctor Portal & Clinical Tools</h2>
+        <p class="slide-subtitle">Empowering physicians with schedule autonomy and medical records</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>⏰ Schedule Management</h3>
+            <p><strong>Input:</strong> Availability details (Days of week, working hours, slot length)<br>
+            <strong>Output:</strong> Schedule updated confirmation, refreshed calendar.<br>
+            <strong>Functionality:</strong> Configure weekly working shifts and manage availability for patient bookings.</p>
+          </div>
+          <div class="card">
+            <h3>🩺 Consultation Provision</h3>
+            <p><strong>Input:</strong> Diagnostic findings, medical advice, prescription list.<br>
+            <strong>Output:</strong> Consultation record saved confirmation.<br>
+            <strong>Functionality:</strong> Conduct consultations, record clinical findings, and issue structured electronic prescriptions.</p>
+          </div>
+          <div class="card">
+            <h3>📂 Patient Record Access</h3>
+            <p><strong>Input:</strong> Patient ID or appointment selection.<br>
+            <strong>Output:</strong> Comprehensive medical history dossier.<br>
+            <strong>Functionality:</strong> View allergies, blood group, chronic conditions, and previous consultation history.</p>
+          </div>
+          <div class="card">
+            <h3>💬 Communication Tools</h3>
+            <p><strong>Input:</strong> Follow-up guidance or consultation messages.<br>
+            <strong>Output:</strong> Real-time message thread.<br>
+            <strong>Functionality:</strong> In-app messaging interface for direct communication between doctor and patient.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 5 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Role 3: Patient</span>
+        <h2 class="slide-title">Patient Portal & Care Experience</h2>
+        <p class="slide-subtitle">Frictionless booking, health records, and prescription access</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>🔍 Consultation Booking</h3>
+            <p><strong>Input:</strong> Doctor selection, preferred date, available slot, symptoms.<br>
+            <strong>Output:</strong> Booking confirmation with Appointment ID.<br>
+            <strong>Functionality:</strong> Real-time slot conflict check and instant appointment confirmation.</p>
+          </div>
+          <div class="card">
+            <h3>💊 Receive Medical Advice</h3>
+            <p><strong>Input:</strong> View consultation history.<br>
+            <strong>Output:</strong> Structured doctor advice, diagnosis, and prescription card.<br>
+            <strong>Functionality:</strong> Read post-consultation notes, medication dosages, and follow-up schedules.</p>
+          </div>
+          <div class="card">
+            <h3>📋 Health Record Management</h3>
+            <p><strong>Input:</strong> Blood group, allergies, chronic conditions, emergency contact.<br>
+            <strong>Output:</strong> Health record updated notification.<br>
+            <strong>Functionality:</strong> Maintain personal health profile accessible to consulting physicians.</p>
+          </div>
+          <div class="card">
+            <h3>👤 Profile Management</h3>
+            <p><strong>Input:</strong> Personal profile updates (Phone, address, emergency contact).<br>
+            <strong>Output:</strong> Profile updated confirmation.<br>
+            <strong>Functionality:</strong> Update and manage personal patient information.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 6 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Database Design</span>
+        <h2 class="slide-title">Relational Data Model</h2>
+        <p class="slide-subtitle">Normalized relational schema with enforced constraints</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3>Users & Schedules</h3>
+            <ul>
+              <li><strong>Users:</strong> id, name, email, passwordHash, role, specialty, phone, status.</li>
+              <li><strong>Schedules:</strong> id, doctorId, dayOfWeek, startTime, endTime, slotDuration, isActive.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Appointments & Care</h3>
+            <ul>
+              <li><strong>Appointments:</strong> id, patientId, doctorId, appointmentDate, timeSlot, reason, status.</li>
+              <li><strong>Consultations:</strong> id, appointmentId, diagnosis, medicalAdvice, prescriptionJson, followUpDate.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Records & Chat</h3>
+            <ul>
+              <li><strong>HealthRecords:</strong> id, patientId, bloodGroup, allergies, chronicConditions, emergencyContact.</li>
+              <li><strong>Messages:</strong> id, appointmentId, senderId, receiverId, content, sentAt.</li>
+              <li><strong>Settings:</strong> key, value, description.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 7 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Security & Quality</span>
+        <h2 class="slide-title">Security & Code Quality Highlights</h2>
+        <p class="slide-subtitle">Built to production-grade engineering standards</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>🔒 Security & Privacy Standards</h3>
+            <ul>
+              <li><strong>JWT Authentication:</strong> Secure bearer token authorization with expiration.</li>
+              <li><strong>Role-Based Access Control (RBAC):</strong> Server-level route middleware preventing role escalation.</li>
+              <li><strong>Bcrypt Password Hashing:</strong> Salt rounds = 10.</li>
+              <li><strong>Sanitized SQL Queries:</strong> Parameterized queries preventing SQL injection.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>✨ Code Quality & Maintainability</h3>
+            <ul>
+              <li><strong>Modular Folder Structure:</strong> Decoupled routes, controllers, middleware, and database layers.</li>
+              <li><strong>Comprehensive Comments:</strong> Every function includes descriptive JSDoc headers.</li>
+              <li><strong>Zero-Config Database:</strong> SQLite requires no external services or Docker, ensuring seamless evaluation.</li>
+              <li><strong>Demo Switcher:</strong> Instant 1-click persona switching for quick testing.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 8 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Demo Scenarios</span>
+        <h2 class="slide-title">System Verification & Demo Flows</h2>
+        <p class="slide-subtitle">Demonstrated live end-to-end user workflows</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Workflow A: Booking to Advice</h3>
+            <ol style="padding-left: 20px; font-size: 14px; line-height: 1.6; color: #475569;">
+              <li>Patient browses Cardiologist Dr. Robert Smith and picks an available morning slot.</li>
+              <li>Doctor opens consultation queue, reviews patient's recorded allergies and symptoms.</li>
+              <li>Doctor completes consultation, inputting diagnosis and a digital prescription.</li>
+              <li>Patient reviews the medical advice and prescriptions in real-time.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>Workflow B: Administrative Governance</h3>
+            <ol style="padding-left: 20px; font-size: 14px; line-height: 1.6; color: #475569;">
+              <li>Admin checks platform analytics (consultation trends, doctor utilization).</li>
+              <li>Admin registers a new specialist doctor account.</li>
+              <li>Admin inspects all platform appointments and can reschedule or cancel if necessary.</li>
+              <li>Admin updates system-wide configuration settings.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 9 of 10</span>
+      </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-badge">Summary</span>
+        <h2 class="slide-title">Conclusion & Deliverables</h2>
+        <p class="slide-subtitle">Project 12: Online Health Consultation Platform</p>
+      </div>
+      <div class="slide-body" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+        <h3 style="font-size: 22px; color: var(--secondary); margin-bottom: 20px;">All Deliverables Successfully Realized</h3>
+        <div class="grid-3" style="margin-bottom: 24px;">
+          <div class="card">
+            <h4>📄 Complete Documentation</h4>
+            <p>PRD, Technical Architecture, REST API Catalog, and Presentation Deck.</p>
+          </div>
+          <div class="card">
+            <h4>🚀 Full-Stack Web App</h4>
+            <p>React + Tailwind frontend, Node.js + Express backend, SQLite with preloaded data.</p>
+          </div>
+          <div class="card">
+            <h4>✅ Submission Ready</h4>
+            <p>Modular code, GitHub-ready repository structure, and demo account credentials.</p>
+          </div>
+        </div>
+        <p style="font-size: 18px; color: var(--primary); font-weight: 700;">Thank you! Ready for Live Demonstration & Q&A.</p>
+      </div>
+      <div class="slide-footer">
+        <span>Project 12: Online Health Consultation Platform</span>
+        <span>Slide 10 of 10</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slideIndicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateSlides() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+      indicator.textContent = `${currentSlide + 1} / ${slides.length}`;
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    function changeSlide(direction) {
+      currentSlide = Math.max(0, Math.min(slides.length - 1, currentSlide + direction));
+      updateSlides();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+    });
+
+    updateSlides();
+  </script>
+</body>
+</html>

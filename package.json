@@ -1,0 +1,14 @@
+{
+  "name": "online-health-consultation-platform",
+  "version": "1.0.0",
+  "description": "Online Health Consultation Platform - Capstone Project 12",
+  "scripts": {
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "seed": "npm run seed --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": ["telemedicine", "health-consultation", "doctor-patient", "electronic-health-records", "ehr"],
+  "author": "Engineering Team",
+  "license": "MIT"
+}
