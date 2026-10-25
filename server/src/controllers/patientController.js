@@ -149,7 +149,7 @@ export function bookAppointment(req, res) {
     }
 
     // Verify doctor exists
-    const doctor = db.prepare('SELECT id, name, specialty FROM users WHERE id = ? AND role = "DOCTOR" AND status = "ACTIVE"').get(doctorId);
+    const doctor = db.prepare("SELECT id, name, specialty FROM users WHERE id = ? AND role = 'DOCTOR' AND status = 'ACTIVE'").get(doctorId);
     if (!doctor) {
       return res.status(404).json({
         success: false,

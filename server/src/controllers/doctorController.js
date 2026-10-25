@@ -223,7 +223,7 @@ export function getPatientHistory(req, res) {
   try {
     const { patientId } = req.params;
 
-    const patient = db.prepare('SELECT id, name, email, phone, avatarUrl, createdAt FROM users WHERE id = ? AND role = "PATIENT"').get(patientId);
+    const patient = db.prepare("SELECT id, name, email, phone, avatarUrl, createdAt FROM users WHERE id = ? AND role = 'PATIENT'").get(patientId);
     if (!patient) {
       return res.status(404).json({
         success: false,
