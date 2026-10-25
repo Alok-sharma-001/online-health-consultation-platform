@@ -155,10 +155,19 @@ export default function Login() {
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={() => handleQuick('DOCTOR_CARDIOLOGY')}
+                  onClick={() => handleQuick('DOCTOR_SARAH')}
                   className="w-full py-2 px-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm transition disabled:opacity-50"
                 >
                   <UserCheck className="w-4 h-4" />
+                  <span>Dr. Sarah Jenkins (General Med)</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-auto" />
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => handleQuick('DOCTOR_CARDIOLOGY')}
+                  className="w-full py-1.5 px-3 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 border border-sky-200 transition disabled:opacity-50"
+                >
                   <span>Dr. Smith (Cardiology)</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-auto" />
                 </button>

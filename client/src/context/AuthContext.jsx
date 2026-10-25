@@ -76,6 +76,7 @@ export function AuthProvider({ children }) {
       ADMIN: { email: 'admin@health.com', password: 'admin123' },
       DOCTOR_CARDIOLOGY: { email: 'dr.smith@health.com', password: 'doctor123' },
       DOCTOR_DERMATOLOGY: { email: 'dr.patel@health.com', password: 'doctor123' },
+      DOCTOR_SARAH: { email: 'dr.sarah@health.com', password: 'doctor123' },
       PATIENT_JOHN: { email: 'john.doe@patient.com', password: 'patient123' },
       PATIENT_JANE: { email: 'jane.roe@patient.com', password: 'patient123' },
     };
