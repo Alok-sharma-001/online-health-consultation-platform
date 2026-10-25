@@ -67,7 +67,11 @@ export default function BookingModal({ doctor, onClose, onSuccess }) {
         }, 1800);
       }
     } catch (err) {
-      setError(err.message || 'Failed to book appointment.');
+      if (err.status === 403 && err.message?.includes('Current role: DOCTOR')) {
+        setError('Session Conflict: A Doctor account token is currently active in your browser. Please click "Sign Out" in the top-right corner, then sign in as a Patient to book.');
+      } else {
+        setError(err.message || 'Failed to book appointment.');
+      }
     } finally {
       setBooking(false);
     }

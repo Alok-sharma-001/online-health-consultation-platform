@@ -27,11 +27,24 @@ export function AuthProvider({ children }) {
           console.error('Failed to authenticate session:', err);
           logout();
         }
+      } else {
+        setUser(null);
       }
       setLoading(false);
     }
     loadUser();
   }, [token]);
+
+  // Sync token changes across multiple tabs
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'curepulse_token') {
+        setToken(e.newValue);
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const login = async (email, password) => {
     const res = await api.login({ email, password });
