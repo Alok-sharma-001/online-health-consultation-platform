@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Online Health Consultation Platform - Capstone Project 12",
   "scripts": {
+    "dev": "npm run server & npm run client",
     "server": "npm start --prefix server",
     "client": "npm run dev --prefix client",
     "seed": "npm run seed --prefix server",

@@ -21,7 +21,16 @@ export async function apiFetch(endpoint, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    const errorMsg = data.message || `Request failed with status ${response.status}`;
+    let errorMsg = data.message || data.error;
+    if (!errorMsg) {
+      if (response.status === 404) {
+        errorMsg = 'API service endpoint unavailable (404). Please ensure the backend server is active on port 5000.';
+      } else if (response.status === 500 || response.status === 502 || response.status === 504) {
+        errorMsg = 'Unable to communicate with API server. Please check that backend server is running on port 5000.';
+      } else {
+        errorMsg = `Request failed with status ${response.status}`;
+      }
+    }
     const err = new Error(errorMsg);
     err.status = response.status;
     err.data = data;
