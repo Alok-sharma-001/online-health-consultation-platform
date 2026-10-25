@@ -4,8 +4,15 @@
  */
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { config } from './src/config/config.js';
 import { initDatabase } from './src/db/database.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientDist = path.join(__dirname, '../client/dist');
 
 import authRoutes from './src/routes/authRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
@@ -54,11 +61,28 @@ app.use('/api/doctor', doctorRoutes);
 app.use('/api/patient', patientRoutes);
 app.use('/api/messages', messageRoutes);
 
-// 404 handler for unknown routes
-app.use((req, res) => {
+// Serve frontend static production assets if built
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
+
+// 404 handler for unknown API routes
+app.use('/api', (req, res) => {
   res.status(404).json({
     success: false,
     message: `API Route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
+
+// Fallback 404 for unhandled requests if client/dist is not built
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
   });
 });
 

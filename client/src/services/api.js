@@ -3,7 +3,7 @@
  * Centralized fetch client handling JWT injection, response parsing, and error normalization.
  */
 
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem('curepulse_token');
